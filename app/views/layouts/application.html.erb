@@ -5,7 +5,7 @@
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= csrf_meta_tags %>
 </head>
-<body data-api-root="<%= api_host %>" data-session-root="<%= login_url %>" data-api-token="<%= access_token %>">
+<body data-api-root="<%= api_host %>" data-api-token="<%= access_token %>">
 <div id="flash_messages"></div>
 
 <div class="navbar navbar-inverse navbar-fixed-top">
@@ -15,20 +15,12 @@
         <ul class="nav">
           <% if current_user %>
             <li><span class="navbar-text">Logged in as <a href="#"><%= current_user.email %></a>. </span> </li>
-            <li><%= link_to "Logout", log_out_path, class: "navbar-link", method: :delete %></li>
+            <li><%= link_to "Logout", destroy_user_session_path, class: "navbar-link", method: :delete %></li>
           <% else %>
-            <li><%= link_to "Sign up", sign_up_path, class: "navbar-link" %></li>
-            <li><%= link_to "Log in", login_path, class: "navbar-link" %></li>
+            <li><%= link_to "Sign up", new_user_registration_path, class: "navbar-link" %></li>
+            <li><%= link_to "Log in", new_user_session_path, class: "navbar-link" %></li>
           <% end %>
         </ul>
-
-        <% if current_user %>
-          <p class="navbar-text pull-right">
-            Your current plan: <span class="label"><%= current_user.plan.capitalize %></span>
-            <%= link_to("Upgrade plan", "http://ranktrackr.com/#plans", :target => "_blank", :class => "btn btn-mini btn-warning", role: "button") %>
-            <%= mail_to("info@ranktrackr.com", "Need Help?", encode: "javascript", :class => "btn btn-inverse btn-mini", role: "button") %>
-          </p>
-        <% end %>
       </div>
 
   </div>
@@ -46,11 +38,10 @@
 
 </div>
 
-<span id="faye_root"></span>
 <%= javascript_include_tag "application" %>
-<% if current_user.present? %>
+<% if current_user %>
   <script type="text/javascript">
-    RT.current_user = new RT.Models.User(<%= current_user.to_json.html_safe %>);
+    WebApp.current_user = new WebApp.Models.User(<%= current_user.to_json.html_safe %>);
   </script>
 <% end %>
 </body>

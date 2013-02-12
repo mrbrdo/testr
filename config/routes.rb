@@ -5,9 +5,6 @@ Testr::Application.routes.draw do
   use_doorkeeper
   devise_for :users
 
-  resources :sessions
-  root to: "pages#home"
-
   # API
   namespace :api do
     namespace :v1 do
@@ -17,5 +14,5 @@ end
 
 BackboneRoutes.draw("pages#home") do
   match "dashboard" => "dashboard"
-  root to: "login"
+  root to: "dashboard"
 end

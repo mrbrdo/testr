@@ -1,4 +1,4 @@
-RT.Helpers.Form =
+WebApp.Helpers.Form =
   mark_fields_as_invalid: (fields, el)->
     _.each fields, (name)->
       el.find("input[name='#{name}']").addClass 'invalid'

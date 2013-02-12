@@ -1,25 +1,21 @@
-class RT.Views.LoginForm extends Backbone.View
+class WebApp.Views.Dashboard extends Backbone.View
   events: ->
-    'submit': 'submit'
+    'submit form': 'submit'
 
   initialize: ->
-    $('body').css('background', '#eee')
-    @model = new RT.Models.Session()
+    @collection = new WebApp.Collections.Posts()
     @modelBinder = new Backbone.ModelBinder()
-    @setup()
-
-  setup: ->
     @listenTo @model, 'validated', @handleValidation
 
   teardown: ->
-    $('body').css('background', 'none')
     @modelBinder.unbind()
     Backbone.Validation.unbind(this)
-    @unbind()
-    @remove()
+
+  context: ->
+    variable: "Hello world"
 
   template: ->
-    JST['forms/login']()
+    JST['dashboard'](@context())
 
   render: ->
     @$el.html @template()

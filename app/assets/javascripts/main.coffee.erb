@@ -1,5 +1,5 @@
 $.ajaxPrefilter (options, original, xhr)->
-  if options.url.startsWith(RT.api_root())
+  if options.url.startsWith(WebApp.api_root())
     options.url += '.json'
     access_token = H.access_token()
     options.url += '?access_token=' + access_token if access_token?
@@ -14,7 +14,7 @@ _.extend Backbone.View.prototype,
   element_in_dom: ->
     @el.parentNode?
 
-window.RT =
+window.WebApp =
   Helpers: {}
   TemplateHelpers: {}
   Models: {}
@@ -24,9 +24,11 @@ window.RT =
   Widgets: {}
 
   init: ->
+    window.H = @compile_helpers(@Helpers)
+    @start()
 
   start: ->
-    @router = new RT.Router()
+    @router = new WebApp.Router()
     Backbone.history.start({pushState: true})
 
   api_root: ->
@@ -60,6 +62,5 @@ window.RT =
 $ ->
   window.JST ||= {}
   Object.merge window.JST, window.HandlebarsTemplates
-  window.H = RT.compile_helpers(RT.Helpers)
     
-  RT.init()
+  WebApp.init()

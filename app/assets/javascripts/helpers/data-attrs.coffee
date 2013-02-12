@@ -1,4 +1,4 @@
-RT.Helpers.DataAttrs =
+WebApp.Helpers.DataAttrs =
 
   access_token: ->
     token = $('body').data('api-token')

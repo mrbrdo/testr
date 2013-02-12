@@ -1,12 +1,15 @@
-RT.Helpers.Navigation =
+WebApp.Helpers.Navigation =
   go_to: (path)->
-    RT.router.navigate(path, trigger: true)
+    WebApp.router.navigate(path, trigger: true)
 
   go_back_or_to_root: ->
-    if RT.current_view?
+    if WebApp.current_view?
       window.history.back()
     else
       @go_to('/')
 
   reload_and_go_to_root: ->
     window.location.href = '/'
+
+  go_to_login: ->
+    window.location.href = '/users/sign_in'

@@ -1,3 +1,7 @@
-class RT.Models.User extends Backbone.Model
+class WebApp.Models.User extends Backbone.Model
   url: ->
-    RT.api_root() + '/user'
+    WebApp.api_root() + '/users'
+
+  initialize: ->
+    @set('password', '')
+    @set('password_confirmation', '')
