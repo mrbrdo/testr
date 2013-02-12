@@ -1,0 +1,18 @@
+class RT.Router extends Backbone.Router
+  routes: <%= BackboneRoutes.instance.to_routes %>
+
+  initialize: ->
+
+  dashboard: ->
+    @check_token()
+
+  login: ->
+    if H.access_token()?
+      H.go_to('dashboard')
+    else
+      login_view = new RT.Views.LoginForm()
+      RT.show_view login_view
+
+  check_token: ->
+    unless H.access_token()?
+      H.reload_and_go_to_root()

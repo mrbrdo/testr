@@ -1,0 +1,65 @@
+$.ajaxPrefilter (options, original, xhr)->
+  if options.url.startsWith(RT.api_root())
+    options.url += '.json'
+    access_token = H.access_token()
+    options.url += '?access_token=' + access_token if access_token?
+  true
+
+_.extend Backbone.View.prototype,
+  close: ->
+    @teardown() if @teardown?
+    @remove()
+    @unbind()
+
+  element_in_dom: ->
+    @el.parentNode?
+
+window.RT =
+  Helpers: {}
+  TemplateHelpers: {}
+  Models: {}
+  Collections: {}
+  Views:
+    Components: {}
+  Widgets: {}
+
+  init: ->
+
+  start: ->
+    @router = new RT.Router()
+    Backbone.history.start({pushState: true})
+
+  api_root: ->
+    H.api_root()
+
+  show_view: (view)->
+    @current_popup.close() if @current_popup?
+    @current_view.close() if @current_view?
+
+    @current_view = view
+    @current_view.render()
+    $('#content').empty().append @current_view.$el
+    @current_view.$('select').chosen() if @current_view.$('select').length > 0
+    @current_view.only_if_element_in_dom?()
+
+  show_popup: (popup)->
+    @current_popup.close() if @current_popup?
+    container = $('#popup_container')
+    container.empty()
+    container.append(popup.render())
+    popup.trigger('dom:loaded')
+    @current_popup = popup
+
+  compile_helpers: (obj)->
+    helpers_aggregate = {}
+    for own module_name, module of obj
+      for own name, func of module
+        helpers_aggregate[name] = func
+    helpers_aggregate
+
+$ ->
+  window.JST ||= {}
+  Object.merge window.JST, window.HandlebarsTemplates
+  window.H = RT.compile_helpers(RT.Helpers)
+    
+  RT.init()
